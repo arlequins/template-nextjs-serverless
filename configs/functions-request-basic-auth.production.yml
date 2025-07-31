@@ -1,0 +1,47 @@
+Type: AWS::CloudFront::Function
+Properties:
+  Name:
+    Fn::Sub: ${self:custom.bucketName}-request
+  FunctionConfig:
+    Comment:
+      Fn::Sub: ${self:custom.bucketName}-request
+    Runtime: cloudfront-js-1.0
+  AutoPublish: true
+  FunctionCode:
+    Fn::Sub: |
+      var REDIRECT_REGEX = /^[^.]+$|\\.(?!(css|gif|ico|jpg|jpeg|js|png|txt|svg|woff|woff2|ttf|map|json|webp|xml|pdf|webmanifest|avif|wasm)$)([^.]+$)/;
+
+      function handler(event) {
+        var request = event.request;
+        var uri = request.uri;
+        var isUriToRedirect = REDIRECT_REGEX.test(uri);
+
+        if (isUriToRedirect) {
+          request.uri = "/index.html";
+        }
+
+        if (uri === '/manifest.json') {
+          return request;
+        }
+
+        var headers = request.headers;
+
+        var authUser = 'core';
+        var authPass = '2yJ7ztUkNrcs';
+        var tmp = authUser + ':' + authPass;
+        var authString = 'Basic ' + tmp.toString('base64');
+        // echo Basic $(echo -n {authUser}:{authPass} | base64)
+
+        if (
+          typeof headers.authorization === "undefined" ||
+          headers.authorization.value !== authString
+        ) {
+          return {
+            statusCode: 401,
+            statusDescription: "Unauthorized",
+            headers: { "www-authenticate": { value: "Basic" } }
+          };
+        }
+
+        return request;
+      }

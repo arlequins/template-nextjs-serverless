@@ -1,0 +1,29 @@
+service: template-nextjs-serverless
+
+frameworkVersion: "3"
+
+useDotenv: true
+
+params: ${file(configs/params.yml)}
+
+provider:
+  name: aws
+  region: ap-northeast-1
+  stage: ${sls:stage}
+  tags: ${file(configs/tags.yml)}
+  deploymentBucket:
+    name: ${self:service}-${sls:stage}-s3-serverless-${param:AWS_IDENTIFIER}
+    serverSideEncryption: AES256
+    blockPublicAccess: true
+
+plugins:
+  - serverless-s3-sync
+  - serverless-deployment-bucket
+
+custom:
+  bucketName: ${self:service}-${sls:stage}-${param:AWS_IDENTIFIER}
+  s3Sync:
+    - bucketName: ${self:custom.bucketName}
+      localDir: out/
+
+resources: ${file(configs/resources.yml)}

@@ -1,0 +1,45 @@
+Type: AWS::CloudFront::Function
+Properties:
+  Name:
+    Fn::Sub: ${self:custom.bucketName}-response
+  FunctionConfig:
+    Comment:
+      Fn::Sub: ${self:custom.bucketName}-response
+    Runtime: cloudfront-js-1.0
+  AutoPublish: true
+  FunctionCode:
+    Fn::Sub: |
+      function handler(event) {
+        var response = event.response;
+        response.headers = Object.assign(
+          {},
+          {
+            'x-frame-options': {
+              value: 'SAMEORIGIN',
+            },
+            'x-content-type-options': {
+              value: 'nosniff',
+            },
+            'x-xss-protection': {
+              value: '1; mode=block',
+            },
+            'strict-transport-security': {
+              value: 'max-age=63072000; includeSubdomains; preload',
+            },
+            server: {
+              value: 'unknown',
+            },
+            'permissions-policy': {
+              value: 'geolocation=*',
+            },
+            'cache-control': {
+              value: 'no-store, no-cache',
+            },
+            'referrer-policy': {
+              value: 'strict-origin-when-cross-origin',
+            },
+          },
+          response.headers
+        );
+        return response;
+      }

@@ -1,0 +1,11 @@
+default:
+  AWS_CLOUDFRONT_WAF_NAME: ${env:AWS_CLOUDFRONT_WAF_NAME, ''}
+  AWS_IDENTIFIER: ${env:AWS_IDENTIFIER, ''}
+
+develop:
+  DOMAIN_ALIASES: dev.example.com
+  AWS_ACM_CERTIFICATION_ARN: arn:aws:acm:us-east-1:{param:AWS_IDENTIFIER}:certificate/{param:AWS_ACM_CERTIFICATION_ID}
+
+production:
+  DOMAIN_ALIASES: example.com
+  AWS_ACM_CERTIFICATION_ARN: arn:aws:acm:us-east-1:{param:AWS_IDENTIFIER}:certificate/{param:AWS_ACM_CERTIFICATION_ID}

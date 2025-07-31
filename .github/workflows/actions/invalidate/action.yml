@@ -1,0 +1,38 @@
+name: Invalidate CloudFront
+runs:
+  using: 'composite'
+  steps:
+    - name: get distribution id
+      id: get_distribution_id
+      run: |
+        echo "DISTRIBUTION_ID=$(aws cloudfront list-distributions --query "DistributionList.Items[?contains(Origins.Items[0].DomainName, '${{ env.DEPLOY_BUCKET }}')].Id" --output text)" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Invalidate CloudFront
+      uses: chetan/invalidate-cloudfront-action@v2
+      env:
+        DISTRIBUTION: ${{ env.DISTRIBUTION_ID }}
+        PATHS: ${{ inputs.invalidate_paths }}
+        AWS_REGION: ${{ inputs.aws_region }}
+        AWS_ACCESS_KEY_ID: ${{ inputs.aws_access_key_id }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.aws_secret_access_key }}
+
+inputs:
+  environment:
+    description: 'The environment'
+    required: true
+    default: 'develop'
+  aws_region:
+    description: 'The AWS region to use'
+    required: true
+    default: 'ap-northeast-1'
+  aws_access_key_id:
+    description: 'aws access key id'
+    required: true
+  aws_secret_access_key:
+    description: 'aws secret access key'
+    required: true
+  invalidate_paths:
+    description: 'The paths to invalidate'
+    default: '/*'
+    required: true

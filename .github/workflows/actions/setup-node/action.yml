@@ -1,0 +1,65 @@
+name: Setup Node
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22.x
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ inputs.aws_access_key_id }}
+        aws-secret-access-key: ${{ inputs.aws_secret_access_key }}
+        aws-region: ${{ inputs.aws_region }}
+
+    - name: Get secrets by name - cloudfront
+      uses: aws-actions/aws-secretsmanager-get-secrets@v1
+      with:
+        secret-ids: |
+          SECRET_INFRA,infra-${{ inputs.environment }}-common/values
+        parse-json-secrets: true
+
+    - name: make envfile
+      uses: SpicyPizza/create-envfile@v1.3
+      with:
+        envkey_NEXT_PUBLIC_ENVIRONMENT: ${{ inputs.environment }}
+        envkey_AWS_IDENTIFIER: ${{ env.SECRET_INFRA_AWS_IDENTIFIER }}
+        envkey_AWS_CLOUDFRONT_WAF_NAME: ${{ env.SECRET_INFRA_AWS_CLOUDFRONT_WAF_NAME }}
+
+    - name: Install yq
+      run: |
+        sudo wget -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+        sudo chmod +x /usr/local/bin/yq
+      shell: bash
+
+    - name: Read service name from serverless.yml
+      id: read_service
+      run: |
+        SERVICE_NAME=$(yq '.service' serverless.yml)
+        echo "service=$SERVICE_NAME" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Set custom environment variable
+      run: echo "DEPLOY_BUCKET=${{ fromJson(steps.read_service.outputs.service) }}-${{ inputs.environment }}-${{ env.SECRET_INFRA_AWS_IDENTIFIER }}" >> $GITHUB_ENV
+      shell: bash
+
+    - name: npm ci
+      run: npm ci
+      shell: bash
+
+inputs:
+  environment:
+    description: 'The environment'
+    required: true
+    default: 'develop'
+  aws_region:
+    description: 'The AWS region to use'
+    required: true
+    default: 'ap-northeast-1'
+  aws_access_key_id:
+    description: 'aws access key id'
+    required: true
+  aws_secret_access_key:
+    description: 'aws secret access key'
+    required: true
