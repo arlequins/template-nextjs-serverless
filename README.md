@@ -2,7 +2,7 @@
 
 template for nextjs using serverless framework v3
 
-static pages(cloudfront + s3)
+cloudfront + lambda
 
 **This repository is a template. Do not store any real secrets or credentials in the codebase. All sensitive information (API keys, tokens, credentials, etc.) must be managed via environment variables or secret managers.**
 
