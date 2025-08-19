@@ -1,4 +1,4 @@
-import { loggingDebug } from '@/libs/utils/logger';
+import { loggingDebug } from '@/lib/utils/logger';
 import axios, { AxiosInstance, AxiosRequestHeaders, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 const responseInterceptor = (response: AxiosResponse) => {

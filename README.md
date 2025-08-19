@@ -14,6 +14,24 @@ static pages(cloudfront + s3)
 "node": ">=22.x"
 ```
 
+## background knowledges
+
+- [Next.js](https://nextjs.org/docs)
+- [shadcn/ui](https://ui.shadcn.com/)
+  - [components](https://ui.shadcn.com/docs/components)
+- [Radix UI](https://www.radix-ui.com/)
+- [v0.app](https://v0.app/)
+
+### ui
+
+- init: `npx shadcn@latest init`
+
+#### add components
+
+```
+npx shadcn@latest add button
+```
+
 ## release command
 
 init: `git flow init`

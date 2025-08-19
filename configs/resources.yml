@@ -34,8 +34,7 @@ Resources:
         SigningBehavior: always
         SigningProtocol: sigv4
   CloudFrontDistribution: ${file(configs/cloudfront/distribution.yml)}
-  # basic auth
-  # CloudFrontFunctionRequest: ${file(configs/cloudfront/functions-request-basic-auth.${sls:stage}.yml)}
+  CloudFrontFunctionRequest: ${file(configs/cloudfront/functions-request.yml)}
   # CloudFrontFunctionResponse: ${file(configs/cloudfront/functions-response.yml)}
 
 Outputs:

@@ -1,7 +1,7 @@
 'use client';
 
-import commonApi from '@/libs/adaptors/api/commonApi';
-import { loggingError } from '@/libs/utils/logger';
+import commonApi from '@/lib/adaptors/api/commonApi';
+import { loggingError } from '@/lib/utils/logger';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect } from 'react';
 
