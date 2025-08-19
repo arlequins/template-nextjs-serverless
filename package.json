@@ -9,9 +9,7 @@
     "build": "next build",
     "start": "npx serve@latest out",
     "lint": "next lint",
-    "lint:fix": "next lint --fix",
-    "format:check": "prettier \"src/**/*.{js,ts,tsx,scss,json}\" --check",
-    "format:write": "prettier \"src/**/*.{js,ts,tsx,scss,json}\" --write",
+    "format": "prettier \"src/**/*.{js,ts,tsx,scss,json}\" --check",
     "deploy:develop": "npm run build && serverless deploy --stage develop",
     "deploy:production": "npm run build && serverless deploy --stage production",
     "prepare": "husky"
