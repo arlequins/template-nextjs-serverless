@@ -1,8 +1,8 @@
-import env, { EnvStage } from "@/constants/env";
-import { DATETIME_FORMAT, setTime } from "./date";
-import axios from "axios";
+import env, { EnvStage } from '@/constants/env';
+import { DATETIME_FORMAT, setTime } from './date';
+import axios from 'axios';
 
-/* eslint-disable no-console */
+ 
 export const loggingInfo = (error: unknown) => {
   if (env.stage === EnvStage.TEST) {
     return;
@@ -17,9 +17,7 @@ export const loggingDebug = (obj: unknown) => {
 };
 
 const normalizeError = (error: unknown) => {
-  const isPayloadSingleError =
-    Object.prototype.hasOwnProperty.call(error, 'e') ||
-    Object.prototype.hasOwnProperty.call(error, 'msg');
+  const isPayloadSingleError = Object.prototype.hasOwnProperty.call(error, 'e') || Object.prototype.hasOwnProperty.call(error, 'msg');
 
   if (isPayloadSingleError) {
     const rawError = error as {

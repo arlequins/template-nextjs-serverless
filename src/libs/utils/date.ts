@@ -13,8 +13,7 @@ export const DATETIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 export const DATE_FORMAT = 'YYYY-MM-DD';
 export const TIME_FORMAT = 'HH:mm';
 
-export const setTime = (value?: string | Date) =>
-  value ? dayjs(value) : dayjs();
+export const setTime = (value?: string | Date) => (value ? dayjs(value) : dayjs());
 
 export const isDayJs = (time: Dayjs) => dayjs.isDayjs(time);
 
