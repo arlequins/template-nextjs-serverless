@@ -2,7 +2,6 @@ import env, { EnvStage } from '@/constants/env';
 import { DATETIME_FORMAT, setTime } from './date';
 import axios from 'axios';
 
- 
 export const loggingInfo = (error: unknown) => {
   if (env.stage === EnvStage.TEST) {
     return;

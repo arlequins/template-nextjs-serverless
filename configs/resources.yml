@@ -23,7 +23,7 @@ Resources:
           Condition:
             StringEquals:
               AWS:SourceArn:
-                Fn::Sub: arn:aws:cloudfront::${AWS::AccountId}:distribution/${Distribution}
+                Fn::Sub: arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}
   OriginAccessControl:
     Type: AWS::CloudFront::OriginAccessControl
     Properties:
@@ -33,17 +33,14 @@ Resources:
         OriginAccessControlOriginType: s3
         SigningBehavior: always
         SigningProtocol: sigv4
-  Distribution: ${file(configs/distribution.yml)}
-  # no custom domain
-  # Distribution: ${file(configs/distribution.default.yml)}
-  CloudFrontFunctionRequest: ${file(configs/functions-request.${sls:stage}.yml)}
+  CloudFrontDistribution: ${file(configs/cloudfront/distribution.yml)}
   # basic auth
-  # CloudFrontFunctionRequest: ${file(configs/functions-request-basic-auth.${sls:stage}.yml)}
-  CloudFrontFunctionResponse: ${file(configs/functions-response.yml)}
+  # CloudFrontFunctionRequest: ${file(configs/cloudfront/functions-request-basic-auth.${sls:stage}.yml)}
+  # CloudFrontFunctionResponse: ${file(configs/cloudfront/functions-response.yml)}
 
 Outputs:
   URL:
     Value:
-      Fn::Sub: https://${Distribution.DomainName}
+      Fn::Sub: https://${CloudFrontDistribution.DomainName}
   DistributionId:
-    Value: !Ref Distribution
+    Value: !Ref CloudFrontDistribution

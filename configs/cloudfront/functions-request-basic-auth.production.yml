@@ -26,8 +26,8 @@ Properties:
 
         var headers = request.headers;
 
-        var authUser = 'core-dev';
-        var authPass = 'QnQLZwWTyD9S';
+        var authUser = 'template';
+        var authPass = '2yJ7ztUkNrcs';
         var tmp = authUser + ':' + authPass;
         var authString = 'Basic ' + tmp.toString('base64');
         // echo Basic $(echo -n {authUser}:{authPass} | base64)

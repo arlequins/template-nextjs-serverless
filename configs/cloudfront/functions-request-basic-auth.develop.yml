@@ -9,29 +9,29 @@ Properties:
   AutoPublish: true
   FunctionCode:
     Fn::Sub: |
-      var REDIRECT_REGEX = /^[^.]+$|\\.(?!(css|gif|ico|jpg|jpeg|js|png|txt|svg|woff|woff2|ttf|map|json|webp|xml|pdf|webmanifest|avif|wasm)$)([^.]+$)/;
+      // CloudFront Function for Basic Auth and SPA redirect
+      var REDIRECT_REGEX = /^[^.]+$|\.(?!(css|gif|ico|jpg|jpeg|js|png|txt|svg|woff|woff2|ttf|map|json|webp|xml|pdf|webmanifest|avif|wasm)$)([^.]+$)/;
 
       function handler(event) {
         var request = event.request;
         var uri = request.uri;
-        var isUriToRedirect = REDIRECT_REGEX.test(uri);
+        var headers = request.headers;
 
-        if (isUriToRedirect) {
+        // Redirect for SPA routing
+        if (REDIRECT_REGEX.test(uri)) {
           request.uri = "/index.html";
         }
-
         if (uri === '/manifest.json') {
           return request;
         }
 
-        var headers = request.headers;
-
-        var authUser = 'core';
-        var authPass = '2yJ7ztUkNrcs';
+        // Read credentials from environment variables (replace at deploy time)
+        var authUser = process.env.AUTH_USER || '';
+        var authPass = process.env.AUTH_PASS || '';
         var tmp = authUser + ':' + authPass;
-        var authString = 'Basic ' + tmp.toString('base64');
-        // echo Basic $(echo -n {authUser}:{authPass} | base64)
+        var authString = 'Basic ' + Buffer.from(tmp).toString('base64');
 
+        // Check Authorization header
         if (
           typeof headers.authorization === "undefined" ||
           headers.authorization.value !== authString
@@ -42,6 +42,5 @@ Properties:
             headers: { "www-authenticate": { value: "Basic" } }
           };
         }
-
         return request;
       }
