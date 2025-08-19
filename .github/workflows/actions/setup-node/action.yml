@@ -46,8 +46,8 @@ runs:
       run: npm run lint
       shell: bash
 
-    - name: npm format
-      run: npm format
+    - name: npm run format
+      run: npm run format
       shell: bash
 
 inputs:
