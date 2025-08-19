@@ -29,27 +29,27 @@ Properties:
       ForwardedValues:
         QueryString: false
       Compress: true
-      # FunctionAssociations:
-      #   - EventType: viewer-request
-      #     FunctionARN: !GetAtt CloudFrontFunctionRequest.FunctionARN
+      FunctionAssociations:
+        - EventType: viewer-request
+          FunctionARN: !GetAtt CloudFrontFunctionRequest.FunctionARN
       #   - EventType: viewer-response
       #     FunctionARN: !GetAtt CloudFrontFunctionResponse.FunctionARN
 
     CustomErrorResponses:
       - ErrorCode: 400
-        ResponsePagePath: /400
+        ResponsePagePath: /400/index.html
         ResponseCode: 400
         ErrorCachingMinTTL: 300
       - ErrorCode: 403
-        ResponsePagePath: /403
+        ResponsePagePath: /403/index.html
         ResponseCode: 403
         ErrorCachingMinTTL: 300
       - ErrorCode: 404
-        ResponsePagePath: /404
+        ResponsePagePath: /404/index.html
         ResponseCode: 404
         ErrorCachingMinTTL: 300
       - ErrorCode: 500
-        ResponsePagePath: /500
+        ResponsePagePath: /500/index.html
         ResponseCode: 500
         ErrorCachingMinTTL: 300
     # ViewerCertificate: - custom domain

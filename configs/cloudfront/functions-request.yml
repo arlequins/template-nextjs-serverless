@@ -1,0 +1,27 @@
+Type: AWS::CloudFront::Function
+Properties:
+  Name:
+    Fn::Sub: ${self:custom.bucketName}-request
+  FunctionConfig:
+    Comment:
+      Fn::Sub: ${self:custom.bucketName}-request
+    Runtime: cloudfront-js-1.0
+  AutoPublish: true
+  FunctionCode:
+    Fn::Sub: |
+      // CloudFront Function (ES5.1)
+      function handler(event) {
+        var request = event.request;
+        var uri = request.uri;
+
+        // If URI ends with '/', append 'index.html'
+        if (uri.charAt(uri.length - 1) === '/') {
+          request.uri += 'index.html';
+        }
+        // If URI does not contain a dot (no file extension), treat as directory
+        else if (uri.indexOf('.') === -1) {
+          request.uri += '/index.html';
+        }
+
+        return request;
+      }
