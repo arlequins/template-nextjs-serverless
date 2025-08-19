@@ -1,10 +1,5 @@
 import { loggingDebug } from '@/libs/utils/logger';
-import axios, {
-  AxiosInstance,
-  AxiosRequestHeaders,
-  AxiosResponse,
-  InternalAxiosRequestConfig,
-} from 'axios';
+import axios, { AxiosInstance, AxiosRequestHeaders, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 const responseInterceptor = (response: AxiosResponse) => {
   loggingDebug({
@@ -28,19 +23,7 @@ export default class AbstractApiService {
 
   public api: AxiosInstance;
 
-  constructor({
-    base,
-    apiTimeout,
-    authorization,
-    useInternalAuthHeaderEndpoints,
-    headers,
-  }: {
-    base: string;
-    apiTimeout?: number;
-    authorization?: string;
-    useInternalAuthHeaderEndpoints?: string[];
-    headers?: AxiosRequestHeaders;
-  }) {
+  constructor({ base, apiTimeout, authorization, useInternalAuthHeaderEndpoints, headers }: { base: string; apiTimeout?: number; authorization?: string; useInternalAuthHeaderEndpoints?: string[]; headers?: AxiosRequestHeaders }) {
     this.base = base;
     this.apiTimeout = apiTimeout;
     this.authorization = authorization ?? '';
@@ -74,13 +57,7 @@ export default class AbstractApiService {
   private authInterceptor = async (request: InternalAxiosRequestConfig) => {
     const url = request.url;
 
-    if (
-      this.authorization &&
-      (!this.useInternalAuthHeaderEndpoints ||
-        this.useInternalAuthHeaderEndpoints?.some(
-          (endpoint) => url === endpoint,
-        ))
-    ) {
+    if (this.authorization && (!this.useInternalAuthHeaderEndpoints || this.useInternalAuthHeaderEndpoints?.some(endpoint => url === endpoint))) {
       request.headers.Authorization = this.authorization;
     }
 

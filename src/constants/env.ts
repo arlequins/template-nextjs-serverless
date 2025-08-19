@@ -4,9 +4,9 @@ const env = {
     common: {
       uri: 'uri',
       key: 'key',
-    }
-  }
-}
+    },
+  },
+};
 
 export const enum EnvStage {
   TEST = 'test',
